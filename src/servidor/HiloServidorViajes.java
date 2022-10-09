@@ -27,16 +27,28 @@ class HiloServidorViajes implements Runnable {
 	 * @param	unGestor		gestor de viajes
 	 */
 	HiloServidorViajes(MyStreamSocket myDataSocket, GestorViajes unGestor) {
-		// POR IMPLEMENTAR
+		// TODO
+		this.myDataSocket = myDataSocket;
+		this.gestor = unGestor;
 	}
 
 	/**
-	 * Gestiona una sesion con un cliente	
+	 * Gestiona una sesion con un cliente
 	 */
 	public void run( ) {
-		String operacion = "0";
+		//TODO
+		String operacion = "1";
+		String origen = "Castellón";
+		String codViaje = null;
+		String codCli = null ;
+		String destino = null ;;
+		String fecha = null ;
+		long precio = 0;
+		long numplazas = 0 ;
+
 		boolean done = false;
-	    // ...
+
+		//Aqui es donde se tiene que hacer la lógica de ver que tipo de mensaje es y como tratarlo
 		try {
 			while (!done) {
 				// Recibe una petición del cliente
@@ -48,31 +60,36 @@ class HiloServidorViajes implements Runnable {
 					break;
 
 				case "1": { // Consulta los viajes con un origen dado
-					// ...
+					JSONArray resOrigen = gestor.consultaViajes(origen);
+					myDataSocket.sendMessage(resOrigen.toJSONString());
+					myDataSocket.close();
 					break;
-				} 
+				}
 				case "2": { // Reserva una plaza en un viaje
-					// ...
 
-					break;
-				}             
-				case "3": { // Pone en venta un articulo
-					// ...
-
+					JSONObject resReserva = gestor.reservaViaje(codViaje,codCli);
+					myDataSocket.sendMessage(resReserva.toJSONString());
+					myDataSocket.close();
 					break;
 				}
-				case "4": { // Oferta un viaje
+				case "3": { // Oferta un viaje
 					// ...
-
+					JSONObject resOferta = gestor.ofertaViaje(codCli,origen,destino,fecha,precio,numplazas);
+					myDataSocket.sendMessage(resOferta.toJSONString());
+					myDataSocket.close();
 					break;
 				}
-				case "5": { // Borra un viaje
+				case "4": { // Borra un viaje
 					// ...
+					JSONObject resBorraViaje = gestor.borraViaje(codViaje,codCli);
+					myDataSocket.sendMessage(resBorraViaje.toJSONString());
+					myDataSocket.close();
+
 					break;
 				}
 
 				} // fin switch
-			} // fin while   
+			} // fin while
 		} // fin try
 		catch (SocketException ex) {
 			System.out.println("Capturada SocketException");
@@ -82,7 +99,7 @@ class HiloServidorViajes implements Runnable {
 		}
 		catch (Exception ex) {
 			System.out.println("Exception caught in thread: " + ex);
-		} // fin catch
+		} // fin catch*/
 	} //fin run
 
-} //fin class 
+} //fin class

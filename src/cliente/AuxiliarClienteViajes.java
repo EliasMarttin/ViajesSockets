@@ -28,7 +28,7 @@ public class AuxiliarClienteViajes {
 	 * @param	hostName	nombre de la maquina que ejecuta el servidor
 	 * @param	portNum		numero de puerto asociado al servicio en el servidor
 	 */
-	AuxiliarClienteViajes(String hostName, String portNum) 
+	AuxiliarClienteViajes(String hostName, String portNum)
 			throws SocketException, UnknownHostException, IOException {
 
 		// IP del servidor
@@ -48,8 +48,21 @@ public class AuxiliarClienteViajes {
 	 * @return array JSON de viajes desde un origen. array vacio si no hay ninguno
 	 */
 	public JSONArray consultaViajes(String origen) {
-		// POR IMPLEMENTAR
-		return null; // cambiar por el retorno correcto
+			// TODO
+		JSONObject envio = new JSONObject();
+		envio.put("Operacion",1);
+		envio.put("codOrigen",origen);
+		JSONArray res = new JSONArray();
+		try {
+			//{"operacion":2,"codviaje":codviaje,"codpasajero":codpasajero}
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println(mySocket.receiveMessage());
+			mySocket.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res; // cambiar por el retorno correcto
 	} // end consultaViajes
 
 
@@ -62,7 +75,7 @@ public class AuxiliarClienteViajes {
 	 * @return	objeto JSON con los datos del viaje. Vacio si no se ha podido reservar
 	 */
 	public JSONObject reservaViaje(String codviaje, String codcliente) {
-		// POR IMPLEMENTAR
+		// TODO
 		return null; // cambiar por el retorno correcto
 	} // end reservaViaje
 	
@@ -74,7 +87,7 @@ public class AuxiliarClienteViajes {
 	 * @return	objeto JSON con los datos del viaje. Vacio si no se ha podido reservar
 	 */
 	public JSONObject anulaReserva(String codviaje, String codcliente) {
-		// POR IMPLEMENTAR
+		// TODO
 		return null; // cambiar por el retorno correcto
 	} // end anulaReserva
 
@@ -91,7 +104,7 @@ public class AuxiliarClienteViajes {
 	 */
 	public JSONObject ofertaViaje(String codprop, String origen, String destino,
 			String fecha, long precio, long numplazas) {
-		// POR IMPLEMENTAR
+		// TODO
 		return null; // cambiar por el retorno correcto
 	} // end ofertaViaje
 
@@ -103,7 +116,7 @@ public class AuxiliarClienteViajes {
 	 * @return	objeto JSON con los datos del viaje. Vacio si no se ha podido reservar
 	 */
 	public JSONObject borraViaje(String codviaje, String codcliente) {
-		// POR IMPLEMENTAR
+		// TODO
 		return null; // cambiar por el retorno correcto
 	} // end borraViaje
 
@@ -111,7 +124,7 @@ public class AuxiliarClienteViajes {
 	 * Finaliza la conexion con el servidor
 	 */
 	public void cierraSesion( ) {
-		// POR IMPLEMENTAR
-		return null; // cambiar por el retorno correcto
+		// TODO
+		//return null;  cambiar por el retorno correcto
 	} // end done
 } //end class

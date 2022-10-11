@@ -138,7 +138,7 @@ public class GestorViajes {
 	 *
 	 * @param array	JSONArray con los datos de los Viajes
 	 */
-	private void rellenaDiccionario(JSONArray array) {
+	private synchronized void rellenaDiccionario(JSONArray array) {
 		// TODO
 
 		Iterator<JSONObject> iterator = array.iterator();

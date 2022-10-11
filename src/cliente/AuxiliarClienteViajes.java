@@ -12,6 +12,8 @@ import org.json.simple.parser.ParseException;
 
 import comun.MyStreamSocket;
 
+import javax.swing.*;
+
 /**
  * Esta clase es un modulo que proporciona la logica de aplicacion
  * para el Cliente del sevicio de viajes usando sockets de tipo stream
@@ -50,15 +52,14 @@ public class AuxiliarClienteViajes {
 	public JSONArray consultaViajes(String origen) {
 			// TODO
 		JSONObject envio = new JSONObject();
-		envio.put("Operacion",1);
+		envio.put("Operacion","1");
 		envio.put("codOrigen",origen);
 		JSONArray res = new JSONArray();
+
 		try {
-			//{"operacion":2,"codviaje":codviaje,"codpasajero":codpasajero}
 			mySocket.sendMessage(envio.toJSONString());
 			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println(mySocket.receiveMessage());
-			mySocket.close();
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,7 +77,21 @@ public class AuxiliarClienteViajes {
 	 */
 	public JSONObject reservaViaje(String codviaje, String codcliente) {
 		// TODO
-		return null; // cambiar por el retorno correcto
+		JSONObject envio = new JSONObject();
+		JSONObject res = new JSONObject();
+
+		envio.put("Operacion","2");
+		envio.put("codViaje",codviaje);
+		envio.put("codCli", codcliente);
+
+		try {
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res; // cambiar por el retorno correcto
 	} // end reservaViaje
 	
 	/**
@@ -88,7 +103,20 @@ public class AuxiliarClienteViajes {
 	 */
 	public JSONObject anulaReserva(String codviaje, String codcliente) {
 		// TODO
-		return null; // cambiar por el retorno correcto
+		JSONObject envio = new JSONObject();
+		JSONObject res = new JSONObject();
+		envio.put("Operacion","3");
+		envio.put("codViaje",codviaje);
+		envio.put("codCli", codcliente);
+
+		try {
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res; // cambiar por el retorno correcto
 	} // end anulaReserva
 
 	/**
@@ -105,7 +133,25 @@ public class AuxiliarClienteViajes {
 	public JSONObject ofertaViaje(String codprop, String origen, String destino,
 			String fecha, long precio, long numplazas) {
 		// TODO
-		return null; // cambiar por el retorno correcto
+		JSONObject envio = new JSONObject();
+		JSONObject res = new JSONObject();
+
+		envio.put("Operacion","4");
+		envio.put("codOrigen",origen);
+		envio.put("codCli", codprop);
+		envio.put("destino",destino);
+		envio.put("fecha",fecha);
+		envio.put("precio",precio);
+		envio.put("numplazas",numplazas);
+
+		try {
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res; // cambiar por el retorno correcto
 	} // end ofertaViaje
 
 	/**
@@ -117,7 +163,20 @@ public class AuxiliarClienteViajes {
 	 */
 	public JSONObject borraViaje(String codviaje, String codcliente) {
 		// TODO
-		return null; // cambiar por el retorno correcto
+		JSONObject envio = new JSONObject();
+		JSONObject res = new JSONObject();
+
+		envio.put("Operacion","4");
+		envio.put("codViaje",codviaje);
+
+		try {
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res; // cambiar por el retorno correcto
 	} // end borraViaje
 
 	/**
@@ -125,6 +184,16 @@ public class AuxiliarClienteViajes {
 	 */
 	public void cierraSesion( ) {
 		// TODO
-		//return null;  cambiar por el retorno correcto
+		JSONObject envio = new JSONObject();
+		envio.put("Operacion","0");
+		try {
+			mySocket.sendMessage(envio.toJSONString());
+			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
+			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			mySocket.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		// cambiar por el retorno correcto
 	} // end done
 } //end class

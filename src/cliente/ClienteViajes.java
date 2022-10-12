@@ -5,10 +5,7 @@ import java.util.Scanner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
-import java.util.Scanner;
 
 
 public class ClienteViajes {
@@ -66,12 +63,11 @@ public class ClienteViajes {
 
                         gestor.cierraSesion();
                         System.out.println("Datos Almacenado correctamente :) ");
-                        System.exit(1);
+                        System.exit(0);
 
                         break;
 
                     case 1: { // Consultar viajes con un origen dado
-
                         //TODO
 
                         System.out.println("Introduce el origen");
@@ -81,13 +77,10 @@ public class ClienteViajes {
                         if(viajesOfertados.size()==0) {
                             System.out.println("No se ha encontrado viajes desde este origen");
                         }else {
-
-                            //System.out.println("Viajes disponibles" + "\n" + viajesOfertados.toJSONString());
-                            for(Object viaje: viajesOfertados){
+                            System.out.println("Viajes disponibles" + "\n");
+                            for(Object viaje: viajesOfertados)
                                 System.out.println(viaje.toString());
-                            }
                         }
-
                         break;
                     }
 
@@ -100,26 +93,27 @@ public class ClienteViajes {
                         if(viaje.size()==0)
                             System.out.println("Error en los datos de la reserva ");
                         else
-                            System.out.println("Datos del viaje reservado "+viaje.toJSONString());
+                            System.out.println("Datos del viaje reservado " + viaje.toJSONString());
 
                         break;
                     }
 
                     case 3: { // Anular una reserva
                         // TODO
+
                         System.out.println("Introduce el código del viaje que quieres anular la reserva.");
                         String codViajeAnular = teclado.nextLine();
-                        JSONObject viaje = gestor.anulaReserva(codViajeAnular,codcli);
+                        JSONObject viaje = gestor.anulaReserva(codViajeAnular, codcli);
                         if(viaje.size()!=0)
-                            System.out.println("Datos de la reserva anulada ->"+viaje.toJSONString());
+                            System.out.println("Datos de la reserva anulada ->" + viaje.toJSONString());
                         else
                             System.out.println("Error al intentar anular la reserva ");
                         break;
                     }
 
                     case 4: { // Ofertar un viaje
-
                         // TODO
+
                         System.out.println("Por favor rellene los datos que se le pide para reservar un viaje. ");
                         System.out.println("Introduce el Origen");
                         String origenOferta = teclado.nextLine();
@@ -134,7 +128,7 @@ public class ClienteViajes {
                         JSONObject viajeOfertado = gestor.ofertaViaje(codcli, origenOferta, destinoOferta, fechaOferta, precioOferta, plazasOferta);
 
                         if(viajeOfertado.size() != 0)
-                            System.out.println("Datos del viaje Ofertado ->" +viajeOfertado.toJSONString());
+                            System.out.println("Datos del viaje Ofertado ->" + viajeOfertado.toJSONString());
                         else
                             System.out.println("Error en los datos proporcionados ");
 
@@ -146,7 +140,7 @@ public class ClienteViajes {
 
                         System.out.println("Introduce el código del viaje que quieres borrar ");
                         String codViajeBorrar = teclado.nextLine();
-                        JSONObject viaje = gestor.borraViaje(codViajeBorrar,codcli);
+                        JSONObject viaje = gestor.borraViaje(codViajeBorrar, codcli);
                         if(viaje.size()==0)
                             System.out.println("Error al intentar borrar el viaje ");
                         else

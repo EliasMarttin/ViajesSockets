@@ -4,15 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import comun.MyStreamSocket;
-
-import javax.swing.*;
 
 /**
  * Esta clase es un modulo que proporciona la logica de aplicacion
@@ -58,8 +53,7 @@ public class AuxiliarClienteViajes {
 
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			res = (JSONArray) parser.parse(mySocket.receiveMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,8 +80,7 @@ public class AuxiliarClienteViajes {
 
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			res = (JSONObject) parser.parse(mySocket.receiveMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,8 +104,8 @@ public class AuxiliarClienteViajes {
 
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			res = (JSONObject) parser.parse(mySocket.receiveMessage());
+
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -130,8 +123,7 @@ public class AuxiliarClienteViajes {
 	 * @param numplazas	numero de plazas ofertadas
 	 * @return	viaje ofertado en formatoJSON. Vacio si no se ha podido ofertar
 	 */
-	public JSONObject ofertaViaje(String codprop, String origen, String destino,
-			String fecha, long precio, long numplazas) {
+	public JSONObject ofertaViaje(String codprop, String origen, String destino, String fecha, long precio, long numplazas) {
 		// TODO
 		JSONObject envio = new JSONObject();
 		JSONObject res = new JSONObject();
@@ -146,8 +138,7 @@ public class AuxiliarClienteViajes {
 
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			res = (JSONObject) parser.parse(mySocket.receiveMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,13 +157,13 @@ public class AuxiliarClienteViajes {
 		JSONObject envio = new JSONObject();
 		JSONObject res = new JSONObject();
 
-		envio.put("Operacion","4");
+		envio.put("Operacion","5");
 		envio.put("codViaje",codviaje);
+		envio.put("codCliente", codcliente);
 
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			res = (JSONObject) parser.parse(mySocket.receiveMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -188,8 +179,7 @@ public class AuxiliarClienteViajes {
 		envio.put("Operacion","0");
 		try {
 			mySocket.sendMessage(envio.toJSONString());
-			System.out.println("La conecxion se ha realizado de manera satisfactoria ; )");
-			System.out.println("He recibido esto: "+mySocket.receiveMessage());
+			System.out.println(mySocket.receiveMessage());
 			mySocket.close();
 		}catch (Exception e) {
 			e.printStackTrace();

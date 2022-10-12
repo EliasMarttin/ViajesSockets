@@ -23,6 +23,14 @@ class HiloServidorViajes implements Runnable {
 	private GestorViajes gestor;
 	private JSONParser parser ;
 	JSONObject objeto;
+	String operacion;
+	String origen;
+	String codViaje;
+	String codCli;
+	String destino;
+	String fecha ;
+	long precio;
+	long numplazas;
 
 	/**
 	 * Construye el objeto a ejecutar por la hebra para servir a un cliente
@@ -30,8 +38,8 @@ class HiloServidorViajes implements Runnable {
 	 * @param	unGestor		gestor de viajes
 	 */
 	HiloServidorViajes(MyStreamSocket myDataSocket, GestorViajes unGestor) {
-
 		// TODO
+
 		this.myDataSocket = myDataSocket;
 		this.gestor = unGestor;
 		parser = new JSONParser();
@@ -42,41 +50,29 @@ class HiloServidorViajes implements Runnable {
 	 */
 	public void run( ) {
 		//TODO
-		String operacion = "";
-		String origen = "";
-		String codViaje = "";
-		String codCli = "" ;
-		String destino = "" ;;
-		String fecha = "" ;
-		long precio = 0;
-		long numplazas = 0 ;
+
 
 		boolean done = false;
 		try {
-			objeto = (JSONObject) parser.parse(myDataSocket.receiveMessage());
-			System.out.println(objeto.toString());
-
-			operacion = (String) objeto.get("Operacion");
-			origen = (String) objeto.get("codOrigen");
-
-
-
-		}catch (IOException e) {
-			e.printStackTrace();
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-
-		//Aqui es donde se tiene que hacer la lógica de ver que tipo de mensaje es y como tratarlo
-		try {
-
 			while (!done) {
 				// Recibe una petición del cliente
 				// Extrae la operación y sus parámetros
+				try {
+					objeto = (JSONObject) parser.parse(myDataSocket.receiveMessage());
+
+					System.out.println(objeto.toString());//Esta línea es opcional, pero la uso para ver que se está enviando los datos.
+					operacion = (String) objeto.get("Operacion");
+
+				} catch (ParseException | IOException e) {
+					throw new RuntimeException(e);
+				}
+
 
 				switch (operacion) {
 				case "0":
-					// ...
+					gestor.guardaDatos();
+					myDataSocket.sendMessage("Cerrando sesión...");
+					myDataSocket.close();
 					break;
 
 				case "1": { // Consulta los viajes con un origen dado
@@ -92,21 +88,28 @@ class HiloServidorViajes implements Runnable {
 					myDataSocket.sendMessage(resReserva.toJSONString());
 					break;
 				}
-				case "3": { // Oferta un viaje
+				case "3": {// Elimina Reserva
+					codViaje = (String) objeto.get("codViaje");
+					codCli = (String) objeto.get("codCli");
+					JSONObject  resElminar = gestor.anulaReserva(codViaje, codCli);
+					myDataSocket.sendMessage(resElminar.toJSONString());
+					break;
+				}
+				case "4": { // Oferta un viaje
 					// ...
 					codCli = (String) objeto.get("codCli");
 					origen = (String) objeto.get("codOrigen");
 					destino = (String) objeto.get("destino");
 					fecha = (String) objeto.get("fecha");
-					precio = (long) objeto.get("precio");
-					numplazas = (long) objeto.get("numplazas");
+					precio =  Long.parseLong( objeto.get("precio").toString());
+					numplazas =  Long.parseLong(objeto.get("numplazas").toString());
 					JSONObject resOferta = gestor.ofertaViaje(codCli,origen,destino,fecha,precio,numplazas);
 					myDataSocket.sendMessage(resOferta.toJSONString());
 					break;
 				}
-				case "4": { // Borra un viaje
+				case "5": { // Borra un viaje
 					codViaje = (String) objeto.get("codViaje");
-					codCli = (String) objeto.get("codCli");
+					codCli = (String) objeto.get("codCliente");
 					JSONObject resBorraViaje = gestor.borraViaje(codViaje,codCli);
 					myDataSocket.sendMessage(resBorraViaje.toJSONString());
 					break;

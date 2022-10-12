@@ -55,7 +55,7 @@ public class GestorViajes {
 	/**
 	 * Cuando cada cliente cierra su sesion volcamos los datos en el fichero para mantenerlos actualizados
 	 */
-	public void guardaDatos(){
+	public synchronized void guardaDatos(){
 		File file = new File("viajes.json");
 		try {
 			os = new FileWriter(file);
@@ -72,7 +72,7 @@ public class GestorViajes {
 	 * 
 	 * @param os	stream de escritura asociado al fichero de datos
 	 */
-	private void escribeFichero(FileWriter os) {
+	private synchronized void escribeFichero(FileWriter os) {
 		// TODO
 		//Se guarda en path local, por lo que no depende del path de la máquina.
 		try (FileWriter file = new FileWriter("viajes.json")) {
@@ -118,7 +118,7 @@ public class GestorViajes {
 	 *
 	 * @param is	stream de lectura de los datos del fichero
 	 */
-	private void leeFichero(FileReader is) {
+	private synchronized void leeFichero(FileReader is) {
 		JSONParser parser = new JSONParser();
 		try {
 			// Leemos toda la información del fichero en un array de objetos JSON
@@ -156,7 +156,7 @@ public class GestorViajes {
 	 * @param origen
 	 * @return JSONArray de viajes con un origen dado. Vacío si no hay viajes disponibles con ese origen
 	 */
-	public JSONArray consultaViajes(String origen) {
+	public synchronized JSONArray consultaViajes(String origen) {
 		// TODO
 
 		JSONArray arrayViajesOrigen = new JSONArray();
@@ -180,11 +180,11 @@ public class GestorViajes {
 	 * @param codcli
 	 * @return JSONObject con la información del viaje. Vacío si no existe o no está disponible
 	 */
-	public JSONObject reservaViaje(String codviaje, String codcli) {
+	public synchronized JSONObject reservaViaje(String codviaje, String codcli) {
 		//TODO
 
 		Viaje viajeReservado = mapa.get(codviaje);
-		if(viajeReservado!=null && viajeReservado.anyadePasajero(codcli)){ // && !codcli.equals(viajeReservado.getCodprop() -> Respuesta de por qué está comentado. Fichero->@Respuestas_BancoPruebas
+		if(viajeReservado!=null && !codcli.equals(viajeReservado.getCodprop()) && viajeReservado.anyadePasajero(codcli)){
 			return viajeReservado.toJSON();
 		}
 
@@ -198,7 +198,7 @@ public class GestorViajes {
 	 * @param codcli	codigo del cliente
 	 * @return	JSON del viaje en que se ha anulado la reserva. JSON vacio si no se ha anulado
 	 */
-	public JSONObject anulaReserva(String codviaje, String codcli) {
+	public synchronized JSONObject anulaReserva(String codviaje, String codcli) {
 		//TODO
 
 		Viaje viajeAnular = mapa.get(codviaje);
@@ -241,7 +241,7 @@ public class GestorViajes {
 	 * @param numplazas
 	 * @return	JSONObject con los datos del viaje ofertado
 	 */
-	public JSONObject ofertaViaje(String codcli, String origen, String destino, String fecha, long precio, long numplazas) {
+	public synchronized JSONObject ofertaViaje(String codcli, String origen, String destino, String fecha, long precio, long numplazas) {
 		// TODO
 
 		if (!es_fecha_valida(fecha) || origen.equals(destino) || precio < 0 || numplazas <= 0)
@@ -261,7 +261,7 @@ public class GestorViajes {
 	 * @param codcli	codigo del cliente
 	 * @return	JSONObject del viaje borrado. JSON vacio si no se ha borrado
 	 */
-	public JSONObject borraViaje(String codviaje, String codcli) {
+	public synchronized JSONObject borraViaje(String codviaje, String codcli) {
 		//TODO
 
 		Viaje viaje = mapa.get(codviaje);
